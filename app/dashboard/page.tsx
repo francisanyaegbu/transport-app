@@ -1,6 +1,5 @@
 "use client"
 import { useEffect, useState } from 'react'
-import Navbar from '../../app/components/Navbar'
 import MapPlaceholder from '../../app/components/MapPlaceholder'
 import MapboxMap from '../../app/components/MapboxMap'
 import RideCard from '../../app/components/RideCard'
@@ -22,7 +21,7 @@ function haversine(a: [number, number], b: [number, number]) {
 
 export default function DashboardPage() {
   const [loc, setLoc] = useState<[number,number] | null>(null)
-  const [riders, setRiders] = useState<any[]>([])
+  const [riders, setRiders] = useState<unknown[]>([])
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -46,7 +45,6 @@ export default function DashboardPage() {
 
   return (
     <>
-      <Navbar />
       <main style={{ padding: 12 }}>
         <h1>Dashboard</h1>
         <p>Nearby riders and quick search.</p>
