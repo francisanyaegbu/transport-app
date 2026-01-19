@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { House, User, ClockCounterClockwise, Gear } from '@phosphor-icons/react'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -46,12 +47,12 @@ export default function Navbar() {
         style={{
           position: 'fixed',
           top: 0,
-          left: 0,
+          right: 0,
           height: '100vh',
           width: 250,
           backgroundColor: 'white',
-          boxShadow: '2px 0 8px rgba(0, 0, 0, 0.15)',
-          transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
+          boxShadow: '-2px 0 8px rgba(0, 0, 0, 0.15)',
+          transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
           transition: 'transform 0.3s ease-in-out',
           zIndex: 999,
           padding: 20,
@@ -76,6 +77,52 @@ export default function Navbar() {
           </Link>
         </div>
       </div>
+
+      {/* Bottom Navigation - Mobile Only */}
+      <nav
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          display: 'none',
+          height: 70,
+          backgroundColor: 'white',
+          borderTop: '1px solid #eee',
+          zIndex: 100,
+        }}
+        className="mobile-bottom-nav"
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', height: '100%' }}>
+          <Link href="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none', color: 'inherit' }}>
+            <House size={24} />
+            <span style={{ fontSize: 12 }}>Dashboard</span>
+          </Link>
+          <Link href="/history" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none', color: 'inherit' }}>
+            <ClockCounterClockwise size={32} />
+            <span style={{ fontSize: 12 }}>History</span>
+          </Link>
+          <Link href="/profile" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none', color: 'inherit' }}>
+            <User size={24} />
+            <span style={{ fontSize: 12 }}>Profile</span>
+          </Link>
+          <Link href="/settings" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none', color: 'inherit' }}>
+            <Gear size={24} />
+            <span style={{ fontSize: 12 }}>Settings</span>
+          </Link>
+        </div>
+      </nav>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .mobile-bottom-nav {
+            display: flex;
+          }
+          body {
+            padding-bottom: 70px;
+          }
+        }
+      `}</style>
     </>
   )
 }
