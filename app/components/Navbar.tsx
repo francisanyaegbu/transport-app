@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { House, User, ClockCounterClockwise, Gear } from '@phosphor-icons/react'
+import { House, UserCircle, ClockCounterClockwise, Gear } from '@phosphor-icons/react'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -85,7 +85,6 @@ export default function Navbar() {
           bottom: 0,
           left: 0,
           right: 0,
-          display: 'none',
           height: 70,
           backgroundColor: 'white',
           borderTop: '1px solid #eee',
@@ -93,27 +92,30 @@ export default function Navbar() {
         }}
         className="mobile-bottom-nav"
       >
-        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', height: '100%' }}>
+        <div className='flex flex-row items-center justify-between w-full px-6'>
           <Link href="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none', color: 'inherit' }}>
-            <House size={24} />
-            <span style={{ fontSize: 12 }}>Dashboard</span>
+            <House size={28} />
+            <span style={{ fontSize: 12 }}></span>
           </Link>
           <Link href="/history" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none', color: 'inherit' }}>
-            <ClockCounterClockwise size={32} />
-            <span style={{ fontSize: 12 }}>History</span>
+            <ClockCounterClockwise size={28} />
+            <span style={{ fontSize: 12 }}></span>
           </Link>
           <Link href="/profile" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none', color: 'inherit' }}>
-            <User size={24} />
-            <span style={{ fontSize: 12 }}>Profile</span>
+            <UserCircle size={28} />
+            <span style={{ fontSize: 12 }}></span>
           </Link>
           <Link href="/settings" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none', color: 'inherit' }}>
-            <Gear size={24} />
-            <span style={{ fontSize: 12 }}>Settings</span>
+            <Gear size={28} />
+            <span style={{ fontSize: 12 }}></span>
           </Link>
         </div>
       </nav>
 
       <style>{`
+        .mobile-bottom-nav {
+          display: none;
+        }
         @media (max-width: 768px) {
           .mobile-bottom-nav {
             display: flex;
