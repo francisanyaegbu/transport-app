@@ -6,14 +6,14 @@ export default function ProfileForm() {
   const [role, setRole] = useState<'student'|'rider'>('student')
 
   return (
-    <form style={{ maxWidth: 640 }}>
+    <form>
       <div style={{ marginBottom: 8 }}>
         <label>Name</label>
         <input value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%' }} />
       </div>
       <div style={{ marginBottom: 8 }}>
         <label>Role</label>
-        <select value={role} onChange={(e) => setRole(e.target.value as any)}>
+        <select value={role} onChange={(e) => setRole(e.target.value as never)}>
           <option value="student">Student</option>
           <option value="rider">Rider</option>
         </select>
