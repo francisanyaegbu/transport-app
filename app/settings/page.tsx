@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Navbar from '../../app/components/Navbar'
 import { SignOut, UserCircle, Lock, Question, BellSimpleRinging, GreaterThan } from '@phosphor-icons/react'
+import Link from 'next/link'
 
 export default function SettingsPage() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true)
@@ -30,18 +31,18 @@ export default function SettingsPage() {
         </div>
 
         <div className='flex flex-col gap-5'>
-          <div className='border-b border-gray-300 pb-4 flex items-center justify-between text-sm font-semibold cursor-pointer'>
+          <Link href='/profile' className='border-b border-gray-300 pb-4 flex items-center justify-between text-sm font-semibold cursor-pointer'>
             <div className='flex items-center gap-3'>
               <UserCircle size={25} weight='light' color='gray' />
               User Profile
             </div>
             <GreaterThan size={12} />
-          </div>
+          </Link>
           <div className='border-b border-gray-300 pb-4 flex items-center justify-between text-sm font-semibold cursor-pointer'>
-            <div className='flex items-center gap-3'>
+            <Link href='' className='flex items-center gap-3'>
               <Lock size={25} weight='light' color='gray' />
               Change Password
-            </div>
+            </Link>
             <GreaterThan size={12} />
           </div>
           <div className='border-b border-gray-300 pb-4 flex items-center justify-between text-sm font-semibold cursor-pointer'>

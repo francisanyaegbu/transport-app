@@ -2,10 +2,13 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { House, UserCircle, ClockCounterClockwise, Gear } from '@phosphor-icons/react'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname()
+  const isActive = (p: string) => pathname === p
 
   return (
     <>
@@ -93,21 +96,21 @@ export default function Navbar() {
         className="mobile-bottom-nav"
       >
         <div className='flex flex-row items-center justify-between w-full px-6'>
-          <Link href="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none', color: 'inherit' }}>
-            <House size={28} />
-            <span style={{ fontSize: 12 }}></span>
+          <Link href="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none' }}>
+            <House size={20} color={isActive('/') ? '#2563EB' : 'gray'} />
+            <span style={{ fontSize: 10, color: isActive('/') ? '#2563EB' : 'inherit' }}>Home</span>
           </Link>
-          <Link href="/history" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none', color: 'inherit' }}>
-            <ClockCounterClockwise size={28} />
-            <span style={{ fontSize: 12 }}></span>
+          <Link href="/history" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none' }}>
+            <ClockCounterClockwise size={20} color={isActive('/history') ? '#2563EB' : 'gray'} />
+            <span style={{ fontSize: 10, color: isActive('/history') ? '#2563EB' : 'inherit' }}>History</span>
           </Link>
-          <Link href="/profile" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none', color: 'inherit' }}>
-            <UserCircle size={28} />
-            <span style={{ fontSize: 12 }}></span>
+          <Link href="/profile" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none' }}>
+            <UserCircle size={20} color={isActive('/profile') ? '#2563EB' : 'gray'} />
+            <span style={{ fontSize: 10, color: isActive('/profile') ? '#2563EB' : 'inherit' }}>Profile</span>
           </Link>
-          <Link href="/settings" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none', color: 'inherit' }}>
-            <Gear size={28} />
-            <span style={{ fontSize: 12 }}></span>
+          <Link href="/settings" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none' }}>
+            <Gear size={20} color={isActive('/settings') ? '#2563EB' : 'gray'} />
+            <span style={{ fontSize: 10, color: isActive('/settings') ? '#2563EB' : 'inherit' }}>Settings</span>
           </Link>
         </div>
       </nav>
