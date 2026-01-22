@@ -9,8 +9,8 @@ export default function Navbar() {
 
   return (
     <>
-      <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 12, borderBottom: '1px solid #eee' }}>
-        <div style={{ fontSize: 20, fontWeight: 'bold' }}>CampusRide</div>
+      <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 12, borderBottom: '1px solid #eee', position: 'fixed', top: 0, left: 0, right: 0, backgroundColor: 'white', zIndex: 999 }}>
+        <div style={{ fontSize: 24, fontWeight: 'bold' }}>Move</div>
         <button
           onClick={() => setIsOpen(!isOpen)}
           style={{
