@@ -6,13 +6,11 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-input {
-  border: 1px solid #00000076;
+input, select {
+  border: none;
   border-radius: 10px;
   padding: 5px 12px;
-  width: 400px;
   outline: none;
-  margin-bottom: 5px;
 }
 
 input::placeholder {

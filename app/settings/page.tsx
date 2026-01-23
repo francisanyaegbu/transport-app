@@ -22,8 +22,8 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <p className="text-sm text-neutral-400">Welcome</p>
-              <p className='font-semibold'>username</p>
+              <p className="text-xs text-neutral-400">Welcome</p>
+              <p className='text-sm font-semibold'>username</p>
             </div>
 
           </div>
