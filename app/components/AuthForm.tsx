@@ -1,9 +1,9 @@
 "use client"
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { supabase } from '../lib/supabaseClient'
 import { account } from '../lib/appwriteClient'
+import { GoogleLogo, User, Phone, Envelope, Key } from '@phosphor-icons/react'
 
 type User = {
   id: string
@@ -35,19 +35,8 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: 'log
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
-  const [avatarPreview, setAvatarPreview] = useState<string>('')
   const router = useRouter()
 
- function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        setAvatarPreview(event.target?.result as string)
-     }
-     reader.readAsDataURL(file)
-   }
- }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -67,7 +56,7 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: 'log
       // store profile locally so Profile page can read it (fallback / quick access)
     try {
           const users = readUsers()
-          const newUser: User = { id: data?.user?.id ?? 'u_' + Date.now(), email, password, role: 'student', name, phone, avatar_url: avatarPreview }
+          const newUser: User = { id: data?.user?.id ?? 'u_' + Date.now(), email, password, role: 'student', name, phone }
           users.push(newUser)
           writeUsers(users)
           localStorage.setItem('mock_session', newUser.id)
@@ -97,7 +86,7 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: 'log
            alert('User already exists')
            return
          }
-        const newUser: User = { id: 'u_' + Date.now(), email, password, role: 'student', name, phone, avatar_url: avatarPreview }
+        const newUser: User = { id: 'u_' + Date.now(), email, password, role: 'student', name, phone }
          users.push(newUser)
          writeUsers(users)
          localStorage.setItem('mock_session', newUser.id)
@@ -126,32 +115,49 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: 'log
    }
  
    return (
-     <div className='w-full flex flex-col px-20'>
-       <form onSubmit={handleSubmit}>
+     <div className='w-full flex flex-col px-5'>
+      <form onSubmit={handleSubmit}>
         {mode === 'signup' && (
           <div style={{ marginBottom: 8 }}>
-            <input value={name} onChange={(e) => setName(e.target.value)} type="text" style={{ width: '100%' }} placeholder='Full name' />
-            <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" style={{ width: '100%', marginTop: 8 }} placeholder='Phone (optional)' />
-            <div style={{ marginTop: 8 }}>
-              <input onChange={handleImageChange} type="file" accept="image/*" />
-              {avatarPreview && <Image src={avatarPreview} alt="preview" width={48} height={48} style={{ borderRadius: 24, marginTop: 8 }} />}
+            <div className='flex items-center border border-gray-300 px-3 rounded-md mb-2'>
+              <User size={15} />
+              <input value={name} onChange={(e) => setName(e.target.value)} type="text" style={{ width: '100%' }} placeholder='Full name' />
+            </div>
+            <div className='flex items-center border border-gray-300 px-3 rounded-md'>
+              <Phone size={15} />
+              <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" style={{ width: '100%'}} placeholder='Phone' />
             </div>
           </div>
         )}
-         <div style={{ marginBottom: 8 }}>
-           <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" style={{ width: '100%' }} placeholder='Email' />
-         </div>
-         <div style={{ marginBottom: 8 }}>
-           <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" style={{ width: '100%' }} placeholder='Password' />
-         </div>
-         <button
-           className='text-sm mt-5 bg-black text-white px-4 py-1.5 cursor-pointer w-full text-center rounded-xl' type="submit">
+        <div style={{ marginBottom: 8 }}>
+          <div className='flex items-center border border-gray-300 px-3 rounded-md'>
+            <Envelope size={15} />
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" style={{ width: '100%' }} placeholder='Email' />
+          </div>
+        </div>
+        <div style={{ marginBottom: 8 }}>
+          <div className='flex items-center border border-gray-300 px-3 rounded-md'>
+            <Key size={15} />
+            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" style={{ width: '100%' }} placeholder='Password' />
+          </div>
+        </div>
+        <p className='text-xs text-center text-neutral-500'>
+          By signing up, you agree to our 
+          <a href="/terms" className="text-blue-600 hover:underline"> Terms of Service </a> 
+          and <a href="/privacy" className="text-blue-600 hover:underline"> Privacy Policy</a>
+        </p>
+        <button
+           className='text-sm mt-5 bg-blue-600 text-white hover:bg-blue-800 duration-200 text-nowrap py-2 cursor-pointer w-full text-center rounded-md' type="submit">
            {mode === 'login' ? 'Sign in' : 'Create account'}
-         </button>
-       </form>
-       <div className='mt-3'>
-         <button onClick={handleGoogleSignIn} className='w-full text-sm mt-2 border px-4 py-2 rounded-xl'>Sign in with Google</button>
-       </div>
+        </button>
+      </form>
+      {/* <p className='text-xs text-center mt-4 text-gray-400'>Or Continue with</p>
+      <div className='mt-3'>
+        <button onClick={handleGoogleSignIn} className='flex items-center gap-3 text-xs mt-2 bg-gray-200 px-4 py-1.5 cursor-pointer text-center rounded-xl justify-center'>
+          <GoogleLogo size={20} />
+          Google
+        </button>
+      </div> */}
      </div>
    )
  }
