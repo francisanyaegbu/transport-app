@@ -1,9 +1,11 @@
+// ...existing code...
 "use client"
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '../lib/supabaseClient'
 import { account } from '../lib/appwriteClient'
 import { GoogleLogo, User, Phone, Envelope, Key } from '@phosphor-icons/react'
+import Link from 'next/link'
 
 type User = {
   id: string
@@ -121,31 +123,38 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: 'log
           <div style={{ marginBottom: 8 }}>
             <div className='flex items-center border border-gray-300 px-3 rounded-md mb-2'>
               <User size={15} />
-              <input value={name} onChange={(e) => setName(e.target.value)} type="text" style={{ width: '100%' }} placeholder='Full name' />
+              <input value={name} onChange={(e) => setName(e.target.value)} type="text" className='w-full text-sm' placeholder='Full name' />
             </div>
             <div className='flex items-center border border-gray-300 px-3 rounded-md'>
               <Phone size={15} />
-              <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" style={{ width: '100%'}} placeholder='Phone' />
+              <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" className='w-full text-sm' placeholder='Phone' />
             </div>
           </div>
         )}
         <div style={{ marginBottom: 8 }}>
           <div className='flex items-center border border-gray-300 px-3 rounded-md'>
             <Envelope size={15} />
-            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" style={{ width: '100%' }} placeholder='Email' />
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className='w-full text-sm' placeholder='Email' />
           </div>
         </div>
         <div style={{ marginBottom: 8 }}>
           <div className='flex items-center border border-gray-300 px-3 rounded-md'>
             <Key size={15} />
-            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" style={{ width: '100%' }} placeholder='Password' />
+            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className='w-full text-sm' placeholder='Password' />
           </div>
+          {mode === 'login' && (
+            <div className="text-right mt-2">
+              <Link href="/forgot" className="text-xs text-blue-600 hover:underline">Forgot password?</Link>
+            </div>
+          )}
         </div>
-        <p className='text-xs text-center text-neutral-500'>
-          By signing up, you agree to our 
-          <a href="/terms" className="text-blue-600 hover:underline"> Terms of Service </a> 
-          and <a href="/privacy" className="text-blue-600 hover:underline"> Privacy Policy</a>
-        </p>
+        {mode === 'signup' && (
+          <p className='text-xs text-center text-neutral-500'>
+            By signing up, you agree to our 
+            <a href="/terms" className="text-blue-600 hover:underline"> Terms of Service </a> 
+            and <a href="/privacy" className="text-blue-600 hover:underline"> Privacy Policy</a>
+          </p>
+        )}
         <button
            className='text-sm mt-5 bg-blue-600 text-white hover:bg-blue-800 duration-200 text-nowrap py-2 cursor-pointer w-full text-center rounded-md' type="submit">
            {mode === 'login' ? 'Sign in' : 'Create account'}
@@ -160,4 +169,5 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: 'log
       </div> */}
      </div>
    )
- }
+}
+// ...existing code...

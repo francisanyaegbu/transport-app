@@ -1,14 +1,13 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import AuthForm from '../../app/components/AuthForm'
-import Navbar from '../components/Navbar'
 
 export default function AuthPage() {
   const router = useRouter()
   return (
     <>
-      <main className='flex flex-col items-center'>
-        <p className='text-lg mb-5'>Sign In</p>
+      <main className='flex flex-col items-center mt-25'>
+        <p className='text-lg mb-5 text-blue-950'>Sign In</p>
         <AuthForm initialMode='login' />
         <div className='fixed bottom-0 pb-4'>
           <span className='text-xs'>Not a member? </span>
