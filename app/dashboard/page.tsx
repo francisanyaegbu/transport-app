@@ -57,7 +57,7 @@ export default function DashboardPage() {
     <>
       <main className='px-5 mt-25 mb-17 overflow-hidden w-full relative'>
 
-        <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'center' }}>
+        <div style={{ display: 'flex', marginBottom: 12, alignItems: 'center' }}>
           <input placeholder="Enter lat,lng (e.g. 37.77,-122.41)" onKeyDown={(e) => {
             if (e.key === 'Enter') {
               const v = (e.target as HTMLInputElement).value.trim()
