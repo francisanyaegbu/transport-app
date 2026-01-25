@@ -11,8 +11,7 @@ export default function SettingsPage() {
   return (
     <>
       <Navbar />
-      <main className="flex min-h-fit flex-col pt-10 px-5 mx-auto mt-15 mb-5 overflow-x-hidden">
-        <h1 className="text-xl font-semibold mb-8">Settings</h1>
+      <main className="flex min-h-fit flex-col px-5 mx-auto mt-20 mb-20 overflow-x-hidden">
         <div className='flex items-center justify-between border-b border-gray-300 mb-5'>
           <div className="flex items-center gap-4 mb-6">
 

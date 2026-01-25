@@ -6,6 +6,16 @@ import RideCard from '../../app/components/RideCard'
 import RiderSimulator from '../../app/components/RiderSimulator'
 import { mockRiders } from '../../app/lib/mockRiders'
 
+interface Rider {
+  id: string
+  name: string
+  lat: number
+  lng: number
+  rating: number
+  distanceKm: number
+  eta: number
+}
+
 function toRad(n: number) { return n * Math.PI / 180 }
 function haversine(a: [number, number], b: [number, number]) {
   const R = 6371 // km
@@ -21,11 +31,11 @@ function haversine(a: [number, number], b: [number, number]) {
 
 export default function DashboardPage() {
   const [loc, setLoc] = useState<[number,number] | null>(null)
-  const [riders, setRiders] = useState<unknown[]>([])
+  const [riders, setRiders] = useState<Rider[]>([])
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setLoc([37.7749, -122.4194])
+      setTimeout(() => setLoc([37.7749, -122.4194]), 0)
       return
     }
     navigator.geolocation.getCurrentPosition((p) => {
@@ -40,12 +50,12 @@ export default function DashboardPage() {
       const eta = Math.max(2, Math.round(d * 3))
       return { ...r, distanceKm: d, eta }
     }).sort((a,b) => a.distanceKm - b.distanceKm)
-    setRiders(enriched)
+    queueMicrotask(() => setRiders(enriched))
   }, [loc])
 
   return (
     <>
-      <main className='px-5 mt-25 overflow-hidden'>
+      <main className='px-5 mt-25 mb-17 overflow-hidden w-full relative'>
 
         <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'center' }}>
           <input placeholder="Enter lat,lng (e.g. 37.77,-122.41)" onKeyDown={(e) => {
@@ -56,16 +66,13 @@ export default function DashboardPage() {
                 if (!Number.isNaN(a) && !Number.isNaN(b)) setLoc([a, b])
               }
             }
-          }} style={{ flex: 1, padding: 8 }} />
+          }} className='' />
 
           <button onClick={() => {
             if (!navigator.geolocation) { alert('Geolocation not available') ; return }
             navigator.geolocation.getCurrentPosition(p => setLoc([p.coords.latitude, p.coords.longitude]), () => alert('Unable to read location'))
-          }}>Use my location</button>
-
-          <label style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-            <input type="checkbox" checked={Boolean(process.env.NEXT_PUBLIC_MAPBOX_TOKEN) && false} readOnly /> Mapbox
-          </label>
+          }}
+          className='cursor-pointer text-nowrap border rounded-lg px-3 py-1 border-gray-300 text-xs hover:text-gray-400'>Use my location</button>
         </div>
 
         <div style={{ height: 320, marginBottom: 12 }}>
@@ -100,7 +107,7 @@ function ActiveRequests() {
       try {
         const raw = localStorage.getItem('mock_rides')
         const arr = raw ? JSON.parse(raw) : []
-        setCount(arr.filter((r: any) => r.status !== 'completed' && r.status !== 'cancelled').length)
+        setCount(arr.filter((r: unknown) => typeof r === 'object' && r !== null && 'status' in r && r.status !== 'completed' && r.status !== 'cancelled').length)
       } catch {
         setCount(0)
       }

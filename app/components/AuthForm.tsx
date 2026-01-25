@@ -3,8 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '../lib/supabaseClient'
-import { account } from '../lib/appwriteClient'
-import { GoogleLogo, User, Phone, Envelope, Key } from '@phosphor-icons/react'
+import { User, Phone, Envelope, Key } from '@phosphor-icons/react'
 import Link from 'next/link'
 
 type User = {
@@ -67,7 +66,7 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: 'log
          return
        }
  
-       const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+       const { error } = await supabase.auth.signInWithPassword({ email, password })
        if (error) {
          alert(error.message)
          return
@@ -105,16 +104,6 @@ export default function AuthForm({ initialMode = 'login' }: { initialMode?: 'log
      }
    }
  
-   function handleGoogleSignIn() {
-     try {
-       const success = window.location.origin + '/dashboard'
-       const failure = window.location.origin + '/auth'
-       account.createOAuth2Session('google', success, failure)
-     } catch (err) {
-       console.error(err)
-       alert('Google sign-in failed')
-     }
-   }
  
    return (
      <div className='w-full flex flex-col px-5'>

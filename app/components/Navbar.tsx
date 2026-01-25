@@ -48,13 +48,28 @@ export default function Navbar() {
 
   return (
     <>
-      <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 12, borderBottom: '1px solid #eee', position: 'fixed', top: 0, left: 0, right: 0, backgroundColor: 'white', zIndex: 999 }}>
+      <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 14, borderBottom: '1px solid #eee', position: 'fixed', top: 0, left: 0, right: 0, backgroundColor: 'white', zIndex: 999 }}>
         {/* Desktop left - title */}
         <div className="desktop-left hidden lg:block" style={{ fontSize: 24, fontWeight: 'bold' }}>Move</div>
 
         {/* Mobile left - greeting */}
-        <div className="mobile-left text-lg font-semibold">
-          {getGreeting() + ', ' + displayName}
+        <div className="mobile-left text-md font-semibold flex items-center gap-3">
+          <Link href="/profile" style={{ display: 'inline-block' }}>
+            <div
+              aria-hidden
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 999,
+                overflow: 'hidden',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundImage: `url(${avatarUrl || letterAvatarDataUrl(displayName)})`,
+                border: '1px solid #eee',
+              }}
+            />
+          </Link>
+          {getGreeting() + ', ' + displayName.slice(0, 8) + '...'}
         </div>
 
         {/* Desktop menu button */}
@@ -74,24 +89,9 @@ export default function Navbar() {
         </button>
 
         {/* Mobile right - notifications + avatar */}
-        <div className="mobile-right" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <Link href="/notifications" style={{ marginRight: 12 }}>
+        <div className="mobile-right flex items-center">
+          <Link href="/notifications" className='border p-1.5 rounded-full border-gray-300'>
             <BellSimple size={20} />
-          </Link>
-          <Link href="/profile" style={{ display: 'inline-block' }}>
-            <div
-              aria-hidden
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 999,
-                overflow: 'hidden',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundImage: `url(${avatarUrl || letterAvatarDataUrl(displayName)})`,
-                border: '1px solid #eee',
-              }}
-            />
           </Link>
         </div>
       </nav>
@@ -162,7 +162,7 @@ export default function Navbar() {
          }}
          className="mobile-bottom-nav"
        >
-         <div className='flex flex-row items-center justify-between w-full px-6'>
+         <div className='flex flex-row items-center justify-between w-full px-6 h-full'>
            <Link href="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none' }}>
              <House size={20} color={isActive('/') ? '#2563EB' : 'gray'} />
              <span style={{ fontSize: 10, color: isActive('/') ? '#2563EB' : 'inherit' }}>Home</span>
