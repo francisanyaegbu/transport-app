@@ -45,9 +45,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      <main style={{ padding: 12 }}>
-        <h1>Dashboard</h1>
-        <p>Nearby riders and quick search.</p>
+      <main className='px-5 mt-25 overflow-hidden'>
 
         <div style={{ display: 'flex', gap: 12, marginBottom: 12, alignItems: 'center' }}>
           <input placeholder="Enter lat,lng (e.g. 37.77,-122.41)" onKeyDown={(e) => {

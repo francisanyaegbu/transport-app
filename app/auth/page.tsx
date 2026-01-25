@@ -7,7 +7,7 @@ export default function AuthPage() {
   return (
     <>
       <main className='flex flex-col items-center mt-25'>
-        <p className='text-lg mb-5 text-blue-950'>Sign In</p>
+        <p className='text-xl mb-5 text-blue-950'>Sign In</p>
         <AuthForm initialMode='login' />
         <div className='fixed bottom-0 pb-4'>
           <span className='text-xs'>Not a member? </span>

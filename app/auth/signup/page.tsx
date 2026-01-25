@@ -6,7 +6,7 @@ export default function SignupPage() {
   const router = useRouter()
   return (
     <main className='flex flex-col items-center mt-25'>
-      <p className='text-lg mb-5 text-blue-950'>Sign up</p>
+      <p className='text-xl mb-5 text-blue-950'>Sign up</p>
       <AuthForm initialMode='signup' />
       <div className='fixed bottom-0 pb-4'>
         <span className='text-xs'>Already have an account? </span>
