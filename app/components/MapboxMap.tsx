@@ -2,7 +2,6 @@
 import { useEffect, useRef } from 'react'
 import { mockRiders } from '../lib/mockRiders'
 
-declare const mapboxgl: any
 
 export default function MapboxMap({ center }: { center?: [number, number] }) {
   const containerRef = useRef<HTMLDivElement | null>(null)

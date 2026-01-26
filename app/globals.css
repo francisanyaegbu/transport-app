@@ -16,3 +16,13 @@ input::placeholder {
   font-size: smaller;
   font-weight: lighter;
 }
+
+.history-time {
+  font-size: small;
+}
+
+.history-time p {
+  cursor: pointer;
+  padding : 5px 10px;
+  border-radius: 5px;
+}

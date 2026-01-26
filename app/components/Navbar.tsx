@@ -165,7 +165,7 @@ export default function Navbar() {
          <div className='flex flex-row items-center justify-between w-full px-6 h-full'>
            <Link href="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none' }}>
              <House size={20} color={isActive('/') ? '#2563EB' : 'gray'} />
-             <span style={{ fontSize: 10, color: isActive('/') ? '#2563EB' : 'inherit' }}>Home</span>
+             <span style={{ fontSize: 10, color: isActive('/') ? '#2563EB' : 'inherit' }}>Dashboard</span>
            </Link>
            <Link href="/history" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, textDecoration: 'none' }}>
              <ClockCounterClockwise size={20} color={isActive('/history') ? '#2563EB' : 'gray'} />
