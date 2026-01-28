@@ -26,3 +26,14 @@ input::placeholder {
   padding : 5px 10px;
   border-radius: 5px;
 }
+
+.history-time p:hover {
+  background-color: cadetblue;
+  color: white;
+  transition: 0.2s;
+}
+
+.history-time p:active {
+  background-color: cadetblue;
+  color: white;
+}

@@ -14,7 +14,7 @@ export default function HistoryPage() {
       <Navbar />
       <main className='mt-20 px-5 '>
         <h1 className='text-xl text-center mb-5'>Ride History</h1>
-        <div className='history-time flex items-center justify-between mb-5 border rounded-md border-gray-300 text-gray-400 w-full'>
+        <div className='history-time flex items-center justify-between mb-5 border rounded-md border-gray-300 w-full'>
           {/* map through ride history */}
           <p>1W</p>
           <p>1M</p>

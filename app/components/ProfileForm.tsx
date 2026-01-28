@@ -4,7 +4,9 @@ import { Camera } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 
 export default function ProfileForm() {
+  const [email, setEmail] = useState('')
   const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
   const [role, setRole] = useState<'student'|'rider'>('student')
   const [imageUrl, setImageUrl] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -93,10 +95,10 @@ export default function ProfileForm() {
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder='John Doe' />
           
           <label htmlFor="phone">Phone number</label>
-          <input type="tel" placeholder='+234 123 456 78' />
+          <input type="tel" placeholder='+234 123 456 78' value={phone} onChange={(e) => setPhone(e.target.value)} />
 
           <label htmlFor="email">Email</label>
-          <input type="email" placeholder='example@gmail.com' />
+          <input type="email" placeholder='example@gmail.com' value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
 
          
