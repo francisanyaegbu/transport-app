@@ -66,28 +66,54 @@ export default function HistoryPage() {
     return mockRiders.find(r => r.id === riderId)
   }
 
+  const [range, setRange] = useState<'1W'|'1M'|'3M'|'6M'>('1W')
+
+  function rangeToDays(r: typeof range) {
+    switch (r) {
+      case '1W': return 7
+      case '1M': return 30
+      case '3M': return 90
+      case '6M': return 180
+      default: return 30
+    }
+  }
+
+  const endTs = Date.now()
+  const startTs = endTs - rangeToDays(range) * 24 * 60 * 60 * 1000
+  const dateRangeLabel = `${new Date(startTs).toLocaleDateString('en-US')} — ${new Date(endTs).toLocaleDateString('en-US')}`
+
+  const filteredRides = rides.filter(r => {
+    const t = r.startedAt || r.requestedAt || 0
+    return t >= startTs && t <= endTs
+  })
+
   return (
     <>
       <Navbar />
       <main className='mt-20 px-5 '>
 
         <div className='history-time flex items-center justify-between mb-5 border rounded-md border-gray-300 w-full'>
-          {/* filter by time range - (1W, 1M, 3M, 6M) - functionality can be added later */}
-          <p className='cursor-pointer'>1W</p>
-          <p className='cursor-pointer'>1M</p>
-          <p className='cursor-pointer'>3M</p>
-          <p className='cursor-pointer'>6M</p>
+          {/* filter by time range - click to change range */}
+          {(['1W','1M','3M','6M'] as const).map((r) => (
+            <button
+              key={r}
+              onClick={() => setRange(r)}
+              className={`px-3 py-1 rounded-md text-sm ${range === r ? 'bg-gray-200 font-semibold' : 'text-gray-600'}`}
+            >
+              {r}
+            </button>
+          ))}
         </div>
 
         <div>
-          {/* Display the current date being shown */}
-          <p className='text-lg font-semibold mb-4'>{formattedDate}</p>
+          {/* Display the date range being shown */}
+          <p className='text-lg font-semibold mb-4'>{dateRangeLabel}</p>
 
-          {/* List rides - map through rides and display details */}
+          {/* List rides - map through filtered rides and display details */}
           <div className='flex flex-col gap-3'>
-            {rides.length === 0 && <p className='text-gray-500'>No rides found for the selected period.</p>}
+            {filteredRides.length === 0 && <p className='text-gray-500'>No rides found for the selected period.</p>}
 
-            {rides.map((ride) => {
+            {filteredRides.map((ride) => {
               const rider = getRider(ride.riderId)
               const riderName = rider ? rider.name : 'Unknown rider'
               const profileLink = rider ? `/rider/${rider.id}` : '#'
