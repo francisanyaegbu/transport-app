@@ -53,7 +53,7 @@ export default function Navbar() {
         <div className="desktop-left hidden lg:block" style={{ fontSize: 24, fontWeight: 'bold' }}>Move</div>
 
         {/* Mobile left - greeting */}
-        <div className="mobile-left text-md font-semibold flex items-center gap-3">
+        <div className="mobile-left text-sm font-semibold flex items-center gap-3">
           <Link href="/profile" style={{ display: 'inline-block' }}>
             <div
               aria-hidden
@@ -69,7 +69,7 @@ export default function Navbar() {
               }}
             />
           </Link>
-          {getGreeting() + ', ' + displayName.slice(0, 8) + '...'}
+          {getGreeting() + ', ' + displayName.slice(0, 5) + '...'}
         </div>
 
         {/* Desktop menu button */}
