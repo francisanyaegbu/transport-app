@@ -1,12 +1,12 @@
 'use client';
-import Navbar from './components/Navbar';
-import DashboardPage from './dashboard/page';
+
+import { Lightning } from "@phosphor-icons/react";
 
 export default function Home() {
   return (
       <div>
-        <Navbar />
-        <DashboardPage />
+        <Lightning size={32} />
+        
       </div>
   );
 }
