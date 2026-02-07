@@ -23,7 +23,7 @@ export default function Home() {
             <Lightning size={40} color="white" weight="bold" className="logo-bg p-2 rounded-xl" />
             <p className="text-2xl font-bold">Move</p>
           </div>
-          <Link href='/login' className="signin">Sign In</Link>
+          <Link href='/auth/login' className="signin">Sign In</Link>
         </div>
         <div className="flex flex-col items-center justify-center mt-15">
           <p className="avail w-fit rounded-2xl px-4 py-1.5">Now available on campus</p>
@@ -31,9 +31,9 @@ export default function Home() {
           <span className="text-4xl yourride font-bold">your ride</span>
           <p className="text-lg connect text-center mt-4 mb-7 font-medium">Connect with nearby riders instantly. Safe, fast, and made for campus life.</p>
           <div className="flex flex-col lg:flex-row gap-4 w-full">
-            <button className="text-lg text-white getstarted p-3 font-semibold rounded-2xl cursor-pointer">
+            <Link href='/auth/signup' className="text-lg text-center text-white getstarted p-3 font-semibold rounded-2xl cursor-pointer">
               Get Started
-            </button>
+            </Link>
             <button className="learnmore text-lg text-white p-3 font-semibold rounded-2xl cursor-pointer">
               Learn More
             </button>
