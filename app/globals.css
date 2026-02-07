@@ -1,39 +1,70 @@
 @import "tailwindcss";
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: #1c2739;
+  color: white;
 }
 
-input, select {
-  border: none;
+.logo-bg {
+  background: #10b981;
+}
+
+.signin {
+  color: #2fd38c;
+}
+
+.signin:hover {
+  color: #10b981;
+  text-shadow: #10b981 0px 0px 5px;
+  transition: color 0.3s ease;
+}
+
+.avail {
+  background-color: #133d40;
+  color: #2fd38c;
+}
+
+.yourride {
+  color: #2fd38c;
+}
+
+.connect {
+  color: #8d9baf;
+}
+
+.getstarted {
+  background: #10b981;
+}
+
+.getstarted:hover {
+  background: #2fd38c;
+  transition: background 0.3s ease;
+}
+
+.learnmore {
+  background: #323f4e;
+}
+
+.learnmore:hover {
+  background: #323f4e91;
+}
+
+.howitworks {
+  background: #1d283a;
+}
+
+.icon {
+  padding: 10px;
+  background-color: #1a4648;
+  color: #2fb488;
   border-radius: 10px;
-  padding: 5px 12px;
-  outline: none;
+  margin-bottom: 15px;
 }
 
-input::placeholder {
-  font-size: smaller;
-  font-weight: lighter;
+.how {
+  border-color: #334155;
 }
 
-.history-time {
-  font-size: small;
-}
-
-.history-time p {
-  cursor: pointer;
-  padding : 5px 10px;
-  border-radius: 5px;
-}
-
-.history-time p:hover {
-  background-color: cadetblue;
-  color: white;
-  transition: 0.2s;
-}
-
-.history-time p:active {
-  background-color: cadetblue;
-  color: white;
+.desc {
+  color: #72869b;
 }
