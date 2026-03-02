@@ -2,7 +2,8 @@
 
 import { Clock, UserCircle } from "@phosphor-icons/react";
 import  Link  from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import supabase from '../../lib/supabaseClient'
 
 interface Rider {
   id: number;
@@ -11,12 +12,110 @@ interface Rider {
   vehicle: string;
 }
 
+interface RideRequest {
+  id: string;
+  pickup: string;
+  destination: string;
+  riderName?: string;
+}
+
 export const Dashboard = () => {
-  // Sample nearby riders - replace with real data fetching
-  const [nearbyRiders] = useState<Rider[]>([
-    // { id: 1, name: "John Doe", rating: 4.8, vehicle: "Blue Honda Civic" },
-    // { id: 2, name: "Jane Smith", rating: 4.9, vehicle: "Silver Toyota Camry" },
-  ]);
+  const [role] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('role')
+    }
+    return null
+  })
+  const [nearbyRiders] = useState<Rider[]>([])
+
+  // Rider-specific state
+  const [isOnline, setIsOnline] = useState(false)
+  const [requests, setRequests] = useState<RideRequest[]>([
+    { id: 'r1', pickup: 'North Gate', destination: 'Library', riderName: 'Alice' },
+    { id: 'r2', pickup: 'Cafeteria', destination: 'Dorm A', riderName: 'Bob' }
+  ])
+
+  // Heartbeat / ping for riders: update presence in Supabase periodically (optional)
+  useEffect(() => {
+    if (role !== 'rider') return
+    let mounted = true
+    const interval = setInterval(async () => {
+      try {
+        // Attempt to upsert presence; requires a table (example: rider_presence)
+        await supabase.from('rider_presence').upsert({
+          id: 'local-rider',
+          online: isOnline,
+          last_seen: new Date().toISOString()
+        })
+      } catch (err) {
+        // ignore errors locally - table may not exist; keep console for debugging
+        if (mounted) console.debug('heartbeat', err)
+      }
+    }, 15000)
+
+    return () => { mounted = false; clearInterval(interval) }
+  }, [role, isOnline])
+
+  const acceptRequest = (id: string) => {
+    setRequests((r) => r.filter(req => req.id !== id))
+    // TODO: notify backend that request was accepted
+  }
+
+  const declineRequest = (id: string) => {
+    setRequests((r) => r.filter(req => req.id !== id))
+    // TODO: notify backend that request was declined
+  }
+
+  if (role === 'rider') {
+    return (
+      <div style={{backgroundColor:'#0f172a'}} className="min-h-screen pb-10">
+        <div className='flex items-center justify-between p-3 px-5' style={{backgroundColor:'#162033'}}>
+            <div>
+                <p className="text-nowrap">Rider dashboard</p>
+            </div>
+            <div className='flex items-center gap-3'>
+                <Link href="/history" style={{backgroundColor:'#334155' }} className="p-2 rounded-xl cursor-pointer"><Clock size={25} /></Link>
+                <Link href="/profile" style={{backgroundColor:'#10b981' }} className="p-2 rounded-xl cursor-pointer"><UserCircle size={25} /></Link>
+            </div>
+        </div>
+
+        <div className="px-5 mt-6">
+          <div className="max-w-md mx-auto rounded-xl p-6" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+            <h2 className="text-white text-xl font-semibold mb-4">Status</h2>
+            <div className="flex items-center gap-4">
+              <button onClick={() => setIsOnline(true)} className={`py-2 px-4 rounded ${isOnline ? 'font-bold' : ''}`} style={{ backgroundColor: isOnline ? '#10b981' : '#334155', color: 'white' }}>Go Online</button>
+              <button onClick={() => setIsOnline(false)} className={`py-2 px-4 rounded ${!isOnline ? 'font-bold' : ''}`} style={{ backgroundColor: !isOnline ? '#ef4444' : '#334155', color: 'white' }}>Go Offline</button>
+              <div style={{color:'#8d9baf'}}>{isOnline ? 'Online' : 'Offline'}</div>
+            </div>
+          </div>
+
+          <div className="max-w-md mx-auto rounded-xl p-6 mt-6" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+            <h2 className="text-white text-xl font-semibold mb-4">Ride Requests</h2>
+            {requests.length === 0 ? (
+              <p style={{color:'#8d9baf'}}>No pending requests</p>
+            ) : (
+              <div className="space-y-4">
+                {requests.map(r => (
+                  <div key={r.id} className="p-4 rounded-lg" style={{backgroundColor:'#162033', border:'1px solid #334155'}}>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-white font-semibold">{r.riderName || 'Rider'}</p>
+                        <p className="text-sm" style={{color:'#8d9baf'}}>{r.pickup} → {r.destination}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => acceptRequest(r.id)} className="py-1 px-3 rounded" style={{backgroundColor:'#10b981', color:'white'}}>Accept</button>
+                        <button onClick={() => declineRequest(r.id)} className="py-1 px-3 rounded" style={{backgroundColor:'#334155', color:'white'}}>Decline</button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div style={{backgroundColor:'#0f172a'}} className="min-h-screen pb-10">
