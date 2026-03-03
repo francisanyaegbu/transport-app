@@ -85,7 +85,7 @@ export const Dashboard = () => {
 
   if (role === 'rider') {
     return (
-      <div style={{backgroundColor:'#0f172a'}} className="min-h-screen pb-10">
+      <div style={{backgroundColor:'#0f172a'}} className="min-h-screen pb-24">
         <div className='flex items-center justify-between p-3 px-5' style={{backgroundColor:'#162033'}}>
             <div>
                 <p className="text-nowrap">Rider dashboard</p>
@@ -135,7 +135,7 @@ export const Dashboard = () => {
   }
 
   return (
-    <div style={{backgroundColor:'#0f172a'}} className="min-h-screen pb-10">
+    <div style={{backgroundColor:'#0f172a'}} className="min-h-screen pb-24">
         <div className='flex items-center justify-between p-3 px-5' style={{backgroundColor:'#162033'}}>
             <div>
                 <p className="text-nowrap">Good to see you,</p>
