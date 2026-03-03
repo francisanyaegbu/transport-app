@@ -6,9 +6,9 @@ import { House, Gear, User, Clock } from "@phosphor-icons/react"
 
 const items = [
   { href: '/home', label: 'Home', icon: <House size={24} /> },
-  { href: '/settings', label: 'Settings', icon: <Gear size={24} /> },
-  { href: '/profile', label: 'Profile', icon: <User size={24} /> },
   { href: '/history', label: 'History', icon: <Clock size={24} /> },
+  { href: '/profile', label: 'Profile', icon: <User size={24} /> },
+  { href: '/settings', label: 'Settings', icon: <Gear size={24} /> },
 ]
 
 export default function BottomNav() {
