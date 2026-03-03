@@ -2,17 +2,21 @@
  
 import { Lightning, ArrowLeft } from "@phosphor-icons/react";
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
+import supabase from '../../../lib/supabaseClient'  // ensure correct relative path
+
 
 type SignUpType = 'student' | 'rider' | null;
 
 const InputField = ({ 
   id, 
+  name, 
   label, 
   type = 'text', 
   placeholder 
 }: { 
   id: string; 
+  name?: string;
   label: string; 
   type?: string; 
   placeholder: string 
@@ -22,6 +26,7 @@ const InputField = ({
     <input 
       type={type} 
       id={id}
+      name={name}
       placeholder={placeholder} 
       className="w-full px-4 py-3 rounded-lg text-white border transition-colors placeholder-neutral-500 focus:outline-none"
       style={{ 
@@ -38,6 +43,95 @@ export const Page = () => {
   const router = useRouter();
   const [isSignIn, setIsSignIn] = useState(true);
   const [signUpType, setSignUpType] = useState<SignUpType>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // if user is already signed in, send to dashboard
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) {
+        router.push('/')
+      }
+    })
+  }, [router]);
+
+  // helper to persist role after login
+  const storeRole = async () => {
+    try {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+        if (profile && profile.role) localStorage.setItem('role', profile.role);
+      }
+    } catch (err) {
+      console.debug('store role', err);
+    }
+  };
+
+  const handleSignIn = async (e: FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const email = formData.get('signin-email') as string;
+    const password = formData.get('signin-pass') as string;
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      await storeRole();
+      router.push('/');
+    } catch (err: unknown) {
+      console.debug('signin', err);
+      const msg = (err as { message?: string }).message;
+      setErrorMsg(msg || 'Unable to sign in');
+    }
+  };
+
+  const handleSignUp = async (e: FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+    if (!signUpType) return;
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const email = formData.get(`${signUpType}-email`) as string;
+    const password = formData.get(`${signUpType}-pass`) as string;
+    const confirm = formData.get(`${signUpType}-cpass`) as string;
+    if (password !== confirm) {
+      setErrorMsg('Passwords do not match');
+      return;
+    }
+    const first_name = formData.get(`${signUpType}-fname`) as string;
+    const last_name = formData.get(`${signUpType}-lname`) as string;
+    const phone = formData.get(`${signUpType}-phone`) as string;
+    const extra: Record<string, unknown> = {};
+    if (signUpType === 'rider') {
+      extra.vehicle_type = formData.get('rider-vtype') as string;
+      extra.license_plate = formData.get('rider-lplate') as string;
+      extra.vest_number = formData.get('rider-vest') as string;
+    }
+    try {
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) throw error;
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      if (user) {
+        await supabase.from('profiles').insert({
+          id: user.id,
+          first_name,
+          last_name,
+          phone,
+          role: signUpType,
+          ...extra
+        });
+        localStorage.setItem('role', signUpType);
+        router.push('/');
+      }
+    } catch (err: unknown) {
+      console.debug('signup', err);
+      const msg = (err as { message?: string }).message;
+      setErrorMsg(msg || 'Unable to create account');
+    }
+  };
 
   return (
     <div className="min-h-screen pb-10 flex flex-col items-center justify-center" style={{ backgroundColor: '#1c2739' }}>
@@ -55,6 +149,7 @@ export const Page = () => {
           
           {/* Tab Buttons */}
           <div className="flex gap-4 mb-8">
+            {errorMsg && <p className="text-red-400 text-center w-full mb-2">{errorMsg}</p>}
             <button 
               onClick={() => {
                 setIsSignIn(true);
@@ -93,15 +188,17 @@ export const Page = () => {
           {/* Sign In Form */}
           {isSignIn && (
             <div className="rounded-2xl">
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSignIn}>
                 <InputField 
                   id="signin-email" 
+                  name="signin-email"
                   label="Email" 
                   type="email" 
                   placeholder="you@university.edu" 
                 />
                 <InputField 
                   id="signin-pass" 
+                  name="signin-pass"
                   label="Password" 
                   type="password" 
                   placeholder="........" 
@@ -175,37 +272,43 @@ export const Page = () => {
               >
                 ← Back
               </button>
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSignUp}>
                 <InputField 
                   id="student-fname" 
+                  name="student-fname"
                   label="First Name" 
                   placeholder="John" 
                 />
                 <InputField 
                   id="student-lname" 
+                  name="student-lname"
                   label="Last Name" 
                   placeholder="Doe" 
                 />
                 <InputField 
                   id="student-email" 
+                  name="student-email"
                   label="Email" 
                   type="email" 
                   placeholder="you@university.edu" 
                 />
                 <InputField 
                   id="student-phone" 
+                  name="student-phone"
                   label="Phone Number" 
                   type="tel" 
                   placeholder="+1 (555) 123-4567" 
                 />
                 <InputField 
                   id="student-pass" 
+                  name="student-pass"
                   label="Password" 
                   type="password" 
                   placeholder="........" 
                 />
                 <InputField 
                   id="student-cpass" 
+                  name="student-cpass"
                   label="Confirm Password" 
                   type="password" 
                   placeholder="........" 
@@ -236,52 +339,61 @@ export const Page = () => {
               >
                 ← Back
               </button>
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSignUp}>
                 <InputField 
                   id="rider-fname" 
+                  name="rider-fname"
                   label="First Name" 
                   placeholder="John" 
                 />
                 <InputField 
                   id="rider-lname" 
+                  name="rider-lname"
                   label="Last Name" 
                   placeholder="Doe" 
                 />
                 <InputField 
                   id="rider-email" 
+                  name="rider-email"
                   label="Email" 
                   type="email" 
                   placeholder="you@university.edu" 
                 />
                 <InputField 
                   id="rider-phone" 
+                  name="rider-phone"
                   label="Phone Number" 
                   type="tel" 
                   placeholder="+1 (555) 123-4567" 
                 />
                 <InputField 
                   id="rider-vtype" 
+                  name="rider-vtype"
                   label="Vehicle Type" 
                   placeholder="e.g., Sedan, SUV, Truck" 
                 />
                 <InputField 
                   id="rider-lplate" 
+                  name="rider-lplate"
                   label="License Plate Number" 
                   placeholder="ABC-1234" 
                 />
                 <InputField 
                   id="rider-vest" 
+                  name="rider-vest"
                   label="Vest Number" 
                   placeholder="Enter your vest number" 
                 />
                 <InputField 
                   id="rider-pass" 
+                  name="rider-pass"
                   label="Password" 
                   type="password" 
                   placeholder="........" 
                 />
                 <InputField 
                   id="rider-cpass" 
+                  name="rider-cpass"
                   label="Confirm Password" 
                   type="password" 
                   placeholder="........" 
