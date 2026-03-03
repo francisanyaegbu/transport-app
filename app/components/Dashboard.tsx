@@ -26,6 +26,7 @@ export const Dashboard = () => {
     }
     return null
   })
+  const [lastName, setLastName] = useState<string>('')
   const [nearbyRiders] = useState<Rider[]>([])
 
   // Rider-specific state
@@ -34,6 +35,22 @@ export const Dashboard = () => {
     { id: 'r1', pickup: 'North Gate', destination: 'Library', riderName: 'Alice' },
     { id: 'r2', pickup: 'Cafeteria', destination: 'Dorm A', riderName: 'Bob' }
   ])
+
+  // fetch last name for greeting
+  useEffect(() => {
+    const getName = async () => {
+      try {
+        const user = (await supabase.auth.getUser()).data.user
+        if (user) {
+          const { data, error } = await supabase.from('profiles').select('last_name').eq('id', user.id).single()
+          if (!error && data?.last_name) setLastName(data.last_name)
+        }
+      } catch (err) {
+        console.debug('name fetch', err)
+      }
+    }
+    getName()
+  }, [])
 
   // Heartbeat / ping for riders: update presence in Supabase periodically (optional)
   useEffect(() => {
@@ -83,8 +100,8 @@ export const Dashboard = () => {
           <div className="max-w-md mx-auto rounded-xl p-6" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
             <h2 className="text-white text-xl font-semibold mb-4">Status</h2>
             <div className="flex items-center gap-4">
-              <button onClick={() => setIsOnline(true)} className={`py-2 px-4 rounded ${isOnline ? 'font-bold' : ''}`} style={{ backgroundColor: isOnline ? '#10b981' : '#334155', color: 'white' }}>Go Online</button>
-              <button onClick={() => setIsOnline(false)} className={`py-2 px-4 rounded ${!isOnline ? 'font-bold' : ''}`} style={{ backgroundColor: !isOnline ? '#ef4444' : '#334155', color: 'white' }}>Go Offline</button>
+              <button onClick={() => setIsOnline(true)} className={`btn py-2 px-4 rounded ${isOnline ? 'font-bold' : ''}`} style={{ backgroundColor: isOnline ? '#10b981' : '#334155', color: 'white' }}>Go Online</button>
+              <button onClick={() => setIsOnline(false)} className={`btn py-2 px-4 rounded ${!isOnline ? 'font-bold' : ''}`} style={{ backgroundColor: !isOnline ? '#ef4444' : '#334155', color: 'white' }}>Go Offline</button>
               <div style={{color:'#8d9baf'}}>{isOnline ? 'Online' : 'Offline'}</div>
             </div>
           </div>
@@ -103,8 +120,8 @@ export const Dashboard = () => {
                         <p className="text-sm" style={{color:'#8d9baf'}}>{r.pickup} → {r.destination}</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <button onClick={() => acceptRequest(r.id)} className="py-1 px-3 rounded" style={{backgroundColor:'#10b981', color:'white'}}>Accept</button>
-                        <button onClick={() => declineRequest(r.id)} className="py-1 px-3 rounded" style={{backgroundColor:'#334155', color:'white'}}>Decline</button>
+                        <button onClick={() => acceptRequest(r.id)} className="btn py-1 px-3 rounded" style={{backgroundColor:'#10b981', color:'white'}}>Accept</button>
+                        <button onClick={() => declineRequest(r.id)} className="btn py-1 px-3 rounded" style={{backgroundColor:'#334155', color:'white'}}>Decline</button>
                       </div>
                     </div>
                   </div>
@@ -122,7 +139,7 @@ export const Dashboard = () => {
         <div className='flex items-center justify-between p-3 px-5' style={{backgroundColor:'#162033'}}>
             <div>
                 <p className="text-nowrap">Good to see you,</p>
-                <p className='text-2xl font-bold text-nowrap'>user.firstname</p>
+                <p className='text-2xl font-bold text-nowrap'>{lastName || 'user'}</p>
             </div>
             <div className='flex items-center gap-3'>
                 <Link href="/history" style={{backgroundColor:'#334155' }} className="p-2 rounded-xl cursor-pointer"><Clock size={25} /></Link>
@@ -140,7 +157,7 @@ export const Dashboard = () => {
                 <label htmlFor="destination" className="text-sm text-neutral-400">Destination</label>
                 <input id="destination" type="text" placeholder="Enter destination" className="w-full px-4 py-3 rounded-lg bg-[#1a2332] text-white border border-[#323f4e] placeholder-neutral-500 focus:border-[#10b981] focus:outline-none mb-4" />
 
-                <button className="w-full py-3 rounded-lg font-semibold text-white" style={{ backgroundColor: '#10b981' }}>
+                <button className="btn w-full py-3 rounded-lg font-semibold text-white" style={{ backgroundColor: '#10b981' }}>
                     Find Riders Nearby
                 </button>
             </div>

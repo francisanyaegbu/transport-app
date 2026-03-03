@@ -1,10 +1,10 @@
 import React from 'react'
-import Dashboard from '../components/Dashboard'
+import DashBoard from '../components/DashBoard'
 
 export const page = () => {
   return (
     <div>
-        <Dashboard  />
+        <DashBoard  />
     </div>
  )
 }
